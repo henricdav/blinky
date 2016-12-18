@@ -19,22 +19,22 @@ void delay_us(uint16_t count) {
 
 int pwmLight(int duty_cycle[])
 {
-	int time_period = 200; //us
+	int time_period = 100; //us
 	int on_time[CHANNELS];
 	for (int i = 0; i < CHANNELS; ++i)
 	{
 		on_time[i] = time_period * duty_cycle[i] / 100;
 	}
 	
-	PORTB = 0b00011000;
+	PORTB = 0b00111111;
 	for (int i = 0; i < time_period; ++i)
 	{
 		if (i == on_time[0])
 			PORTB -= 10000;
 		if (i == on_time[1])
 			PORTB -= 1000;
-		//if (i == on_time[2])
-		//	PORTB -= 100;
+		if (i == on_time[2])
+			PORTB -= 100;
 		_delay_us(1);
 	}
 
@@ -64,12 +64,21 @@ int main(void)
 		{
 			if (counter[i] == cycle_length[i])
 			{
-				duty_cycle[i] = rand() % 60;
+				duty_cycle[i] = rand() % 100;
 				cycle_length[i] = 50 + rand() % 400;
 				counter[i] = 0;
 			} 
 		}
 		pwmLight(duty_cycle);
+		//PORTB = 0b00111111;
+		//_delay_ms(1000);
+		//PORTB -= 10000;
+		//_delay_ms(1000);
+		//PORTB -= 1000;
+		//_delay_ms(1000);
+		//PORTB -= 100;
+		//_delay_ms(1000);
+		
 
 		for (int i = 0; i < CHANNELS; ++i)
 		{
